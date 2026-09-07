@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bộ Ghép Số Tự Động PRO (2D - 5D)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #eef2f6;
+            color: #333;
+            margin: 0;
+            padding: 15px;
+            padding-bottom: 50px;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .page-title {
+            font-size: 20px;
+            text-align: center;
+            color: #1a365d;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 800;
+        }
+        .section-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            border-top: 4px solid #3182ce;
+        }
+        .section-card.part-2 {
+            border-top-color: #38a169;
+        }
+        .section-card.part-3 {
+            border-top-color: #805ad5;
+        }
+        h2 {
+            font-size: 15px;
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-transform: uppercase;
+        }
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .flex-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+        
+        /* CSS BỘ CHẠM - TỔNG - THÊM INLINE */
+        .custom-box-container {
+            border: 2px solid #319795;
+            background-color: #e6f2f0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .custom-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .left-inputs {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-row-top {
+            display: flex;
+            gap: 8px;
+        }
+        .input-group-top {
+            flex: 1;
+        }
+        .input-group-top label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #1a202c;
+        }
+        .input-group-top textarea {
+            width: 100%;
+            height: 55px;
+            padding: 6px;
+            border: 1px solid #a0aec0;
+            border-radius: 4px;
+            resize: none;
+            font-size: 13px;
+            font-family: monospace;
+        }
+        .input-row-sub {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .input-row-sub label {
+            width: 45px;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: right;
+            color: #1a202c;
+        }
+        .input-row-sub textarea {
+            flex: 1;
+            height: 45px;
+            padding: 6px;
+            border: 1px solid #a0aec0;
+            border-radius: 4px;
+            resize: none;
+            font-size: 13px;
+            font-family: monospace;
+        }
+        .right-results {
+            flex: 1.2;
+            min-width: 270px;
+            display: flex;
+            flex-direction: column;
+        }
+        .button-bar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .btn-action {
+            flex: 1;
+            background-color: #3182ce;
+            color: white;
+            border: 1px solid #2b6cb0;
+            padding: 6px 4px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-action:hover {
+            background-color: #2b6cb0;
+        }
+        .result-wrapper {
+            position: relative;
+            flex: 1;
+        }
+        .result-display {
+            width: 100%;
+            height: 110px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            padding: 8px;
+            font-size: 13px;
+            font-family: monospace;
+            line-height: 1.4;
+            overflow-y: auto;
+            word-break: break-all;
+            color: #2d3748;
+            border-radius: 4px;
+        }
+        .action-footer-custom {
+            display: flex;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-top: 6px;
+        }
+
+        /* CSS BỘ SỐ & KHUNG KHÁC */
+        .bo-so-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e0;
+        }
+        .btn-bo {
+            background-color: #ffffff;
+            color: #2b6cb0;
+            border: 1.5px solid #bee3f8;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn-bo:hover, .btn-bo:active {
+            background-color: #3182ce;
+            color: white;
+            border-color: #3182ce;
+            transform: scale(0.95);
+        }
+        
+        textarea {
+            width: 100%;
+            height: 60px;
+            padding: 10px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            background-color: #f8fafc;
+            resize: none;
+            transition: all 0.2s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(49,130,206,0.1);
+        }
+        .btn-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .btn-primary {
+            background-color: #3182ce;
+            color: white;
+        }
+        .btn-success {
+            background-color: #38a169;
+            color: white;
+        }
+        .btn-purple {
+            background-color: #805ad5;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-danger {
+            background-color: #e53e3e;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+        }
+        .result-box {
+            background-color: #f0fff4;
+            border: 1.5px solid #c6f6d5;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            display: none;
+        }
+        .result-box.part-1 {
+            background-color: #ebf8ff;
+            border-color: #bee3f8;
+        }
+        .result-box.part-3 {
+            background-color: #faf5ff;
+            border-color: #d6bcfa;
+        }
+        .result-box.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .result-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #276749;
+        }
+        .result-box.part-1 .result-title {
+            color: #2b6cb0;
+        }
+        .result-box.part-3 .result-title {
+            color: #6b46c1;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+        }
+        .btn-copy {
+            background-color: #4a5568;
+            color: white;
+        }
+        .btn-copy-red {
+            border: 1px dashed #e53e3e;
+            color: #e53e3e;
+            background: white;
+        }
+        .btn-copy-red:hover {
+            background: #fff5f5;
+        }
+        .btn-transfer {
+            background-color: #dd6b20;
+            color: white;
+        }
+        .btn-transfer-alt {
+            background-color: #805ad5;
+            color: white;
+        }
+        .result-content {
+            font-size: 13px;
+            word-break: break-all;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.05);
+            max-height: 120px;
+            overflow-y: auto;
+            font-family: monospace;
+            line-height: 1.5;
+        }
+        .count-tag {
+            font-size: 11px;
+            background: #cbd5e0;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: #2d3748;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="page-title">Hệ Thống Ghép Số Tự Động</h1>
+
+    <!-- PHẦN 1: TẠO DÀN 2D, BỘ SỐ & CHẠM -->
+    <div class="section-card">
+        <h2>Phần 1: Tạo Dàn 2D, Bộ Số & Chạm</h2>
+        
+        <!-- 1. CỤM LỌC CHẠM - TỔNG - THÊM -->
+        <div class="custom-box-container">
+            <div class="custom-grid">
+                <div class="left-inputs">
+                    <div class="input-row-top">
+                        <div class="input-group-top">
+                            <label for="customCham">Chạm</label>
+                            <textarea id="customCham" placeholder="VD: 1"></textarea>
+                        </div>
+                        <div class="input-group-top">
+                            <label for="customTong">Tổng</label>
+                            <textarea id="customTong" placeholder="VD: 5"></textarea>
+                        </div>
+                    </div>
+                    <div class="input-row-sub">
+                        <label for="customThem">Thêm</label>
+                        <textarea id="customThem" placeholder="VD: 2,4"></textarea>
+                    </div>
+                </div>
+
+                <div class="right-results">
+                    <div class="button-bar">
+                        <button class="btn-action" onclick="xuLyKetHop()">Kết hợp</button>
+                        <button class="btn-action" onclick="xuLyLayHet()">Lấy hết</button>
+                        <button class="btn-action" onclick="xoaKhungCustom()">Xóa</button>
+                    </div>
+                    <div class="result-wrapper">
+                        <div id="customResult" class="result-display">Không có số nào!</div>
+                    </div>
+                    <div class="action-footer-custom">
+                        <button class="btn-sm btn-transfer" onclick="chuyenCustomXuongPhan2()">↓ Khung 2</button>
+                        <button class="btn-sm btn-transfer-alt" onclick="chuyenCustomXuongPhan3()">↓ Khung 3</button>
+                        <button class="btn-sm btn-copy-red" onclick="copyText('customResult')">COPY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. BỘ SỐ CƠ BẢN -->
+        <label>Chọn nhanh các Bộ số cơ bản (có thể bấm gộp nhiều bộ):</label>
+        <div class="bo-so-container">
+            <button class="btn-bo" onclick="themBoSo('00,55,05,50')">Bộ 00</button>
+            <button class="btn-bo" onclick="themBoSo('01,10,06,60,51,15,56,65')">Bộ 01</button>
+            <button class="btn-bo" onclick="themBoSo('02,20,07,70,52,25,57,75')">Bộ 02</button>
+            <button class="btn-bo" onclick="themBoSo('03,30,08,80,53,35,58,85')">Bộ 03</button>
+            <button class="btn-bo" onclick="themBoSo('04,40,09,90,54,45,59,95')">Bộ 04</button>
+            <button class="btn-bo" onclick="themBoSo('11,66,16,61')">Bộ 11</button>
+            <button class="btn-bo" onclick="themBoSo('12,21,17,71,62,26,67,76')">Bộ 12</button>
+            <button class="btn-bo" onclick="themBoSo('13,31,18,81,63,36,68,86')">Bộ 13</button>
+            <button class="btn-bo" onclick="themBoSo('14,41,19,91,64,46,69,96')">Bộ 14</button>
+            <button class="btn-bo" onclick="themBoSo('22,77,27,72')">Bộ 22</button>
+            <button class="btn-bo" onclick="themBoSo('23,32,28,82,73,37,78,87')">Bộ 23</button>
+            <button class="btn-bo" onclick="themBoSo('24,42,29,92,74,47,79,97')">Bộ 24</button>
+            <button class="btn-bo" onclick="themBoSo('33,88,38,83')">Bộ 33</button>
+            <button class="btn-bo" onclick="themBoSo('34,43,39,93,84,48,89,98')">Bộ 34</button>
+            <button class="btn-bo" onclick="themBoSo('44,99,49,94')">Bộ 44</button>
+        </div>
+
+        <!-- 3. TẠO THEO ĐẦU / ĐUÔI -->
+        <div class="flex-row">
+            <div class="form-group">
+                <label for="inputDau">Chữ số ĐẦU (Hoặc bỏ trống)</label>
+                <textarea id="inputDau" placeholder="VD: 0 1 3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="inputDuoi">Chữ số ĐUÔI (Hoặc bỏ trống)</label>
+                <textarea id="inputDuoi" placeholder="VD: 2 4 6"></textarea>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-primary" onclick="taoDan2D()">TẠO DÀN 2D (ĐẦU/ĐUÔI)</button>
+            <button class="btn-secondary" onclick="xoaKhung1()">XÓA ĐẦU/ĐUÔI</button>
+        </div>
+
+        <div id="boxTao2D" class="result-box part-1">
+            <div class="result-header">
+                <span class="result-title">KẾT QUẢ ĐẦU/ĐUÔI & BỘ SỐ <span id="countTao2D" class="count-tag">0 số</span></span>
+                <div class="action-buttons">
+                    <button class="btn-sm btn-copy" onclick="copyText('contentTao2D')">Copy</button>
+                    <button class="btn-sm btn-transfer" onclick="chuyenXuongPhan2()">↓ Khung 2</button>
+                    <button class="btn-sm btn-transfer-alt" onclick="chuyenXuongPhan3()">↓ Khung 3</button>
+                </div>
+            </div>
+            <div id="contentTao2D" class="result-content"></div>
+        </div>
+    </div>
+
+    <!-- KHUNG 2: GHÉP 3D, 4D, 5D (ĐẦU/ĐUÔI) -->
+    <div class="section-card part-2">
+        <h2>Phần 2: Ghép Dàn 3D, 4D, 5D (Ghép Đầu/Đuôi)</h2>
+        
+        <div class="form-group">
+            <label for="input2D">Dãy số 2D (Nguyên liệu)</label>
+            <textarea id="input2D" placeholder="Nhập dàn 2D (phân cách bằng dấu phẩy hoặc khoảng trắng)"></textarea>
+        </div>
+        
+        <div class="flex-row">
+            <div class="form-group">
+                <label for="input3D">Ghép lần 1 (Tạo 3D)</label>
+                <textarea id="input3D" placeholder="VD: 0 1 2"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="input4D">Ghép lần 2 (Tạo 4D)</label>
+                <textarea id="input4D" placeholder="VD: 3 4 5"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="input5D">Ghép lần 3 (Tạo 5D)</label>
+            <textarea id="input5D" style="height: 50px;" placeholder="VD: 6 7 8"></textarea>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn-success" onclick="xuLyGhepSo()">BẮT ĐẦU GHÉP</button>
+            <button class="btn-secondary" onclick="xoaTrangPhan2()">XÓA KHUNG 2</button>
+        </div>
+        
+        <div id="box3D" class="result-box">
+            <div class="result-header">
+                <span class="result-title">KẾT QUẢ DÀN 3D <span id="count3D" class="count-tag">0 số</span></span>
+                <button class="btn-sm btn-copy" onclick="copyText('content3D')">Copy</button>
+            </div>
+            <div id="content3D" class="result-content"></div>
+        </div>
+        
+        <div id="box4D" class="result-box">
+            <div class="result-header">
+                <span class="result-title">KẾT QUẢ DÀN 4D <span id="count4D" class="count-tag">0 số</span></span>
+                <button class="btn-sm btn-copy" onclick="copyText('content4D')">Copy</button>
+            </div>
+            <div id="content4D" class="result-content"></div>
+        </div>
+
+        <div id="box5D" class="result-box">
+            <div class="result-header">
+                <span class="result-title">KẾT QUẢ DÀN 5D <span id="count5D" class="count-tag">0 số</span></span>
+                <button class="btn-sm btn-copy" onclick="copyText('content5D')">Copy</button>
+            </div>
+            <div id="content5D" class="result-content"></div>
+        </div>
+    </div>
+
+    <!-- KHUNG 3: GHÉP ĐẦU, ĐUÔI VÀ QUÂY GIỮA -->
+    <div class="section-card part-3">
+        <h2>Phần 3: Ghép Đầu, Đuôi & Quây Giữa</h2>
+        
+        <div class="form-group">
+            <label for="input2D_K3">Dãy số 2D (Nguyên liệu)</label>
+            <textarea id="input2D_K3" placeholder="Nhập dàn 2D (phân cách bằng dấu phẩy hoặc khoảng trắng)"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="inputGiua_K3">Chữ số ghép (Tạo 3D)</label>
+            <textarea id="inputGiua_K3" placeholder="VD: 2 3 6 (Sẽ tự động ghép Đầu, Đuôi và Nhét Giữa)"></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-purple" onclick="xuLyQuayGiua()">BẮT ĐẦU GHÉP</button>
+            <button class="btn-secondary" onclick="xoaTrangPhan3()">XÓA KHUNG 3</button>
+        </div>
+        
+        <div id="boxQuayGiua" class="result-box part-3">
+            <div class="result-header">
+                <span class="result-title">KẾT QUẢ GHÉP (ĐẦU/ĐUÔI/GIỮA) <span id="countQuayGiua" class="count-tag">0 số</span></span>
+                <button class="btn-sm btn-copy" onclick="copyText('contentQuayGiua')">Copy</button>
+            </div>
+            <div id="contentQuayGiua" class="result-content"></div>
+        </div>
+    </div>
+
+    <!-- Nút Xóa Toàn Bộ -->
+    <button class="btn-danger" onclick="xoaTatCa()">🗑 XÓA TẤT CẢ DỮ LIỆU 🗑</button>
+    
+</div>
+
+<div id="toast" class="toast">Thông báo!</div>
+
+<script>
+    // --- HÀM XỬ LÝ CHUNG ---
+    function parseInput(txt) {
+        if (!txt) return [];
+        return txt.trim().split(/[\s,;]+/).filter(x => x !== '');
+    }
+
+    function parseDigitsOnly(str) {
+        if (!str) return [];
+        let matches = str.match(/\d/g);
+        return matches ? Array.from(new Set(matches)) : [];
+    }
+
+    function parseInputItems(str) {
+        if (!str) return [];
+        return str.trim().split(/[\s,;]+/).filter(x => x !== '');
+    }
+
+    function getAll2D() {
+        let arr = [];
+        for (let i = 0; i <= 99; i++) {
+            arr.push(i.toString().padStart(2, '0'));
+        }
+        return arr;
+    }
+
+    // --- LOGIC CHẠM - TỔNG - THÊM ---
+    function getPairGhep(chamDigits, themItems) {
+        let res = new Set();
+        let themDigits = [];
+
+        themItems.forEach(item => {
+            if (item.length === 1) themDigits.push(item);
+            else if (item.length === 2) res.add(item);
+        });
+
+        if (chamDigits.length > 0 && themDigits.length > 0) {
+            chamDigits.forEach(c => {
+                themDigits.forEach(t => {
+                    res.add(c + t);
+                    res.add(t + c);
+                });
+            });
+        }
+        return Array.from(res);
+    }
+
+    function displayCustomResult(resArray) {
+        let box = document.getElementById('customResult');
+        if (resArray.length === 0) {
+            box.innerText = 'Không có số nào!';
+        } else {
+            box.innerText = resArray.sort().join(',');
+        }
+    }
+
+    function xuLyKetHop() {
+        let chamDigits = parseDigitsOnly(document.getElementById('customCham').value);
+        let tongDigits = parseDigitsOnly(document.getElementById('customTong').value);
+        let themItems = parseInputItems(document.getElementById('customThem').value);
+
+        let baseSet = new Set();
+
+        // 1. Tạo tập số cơ sở theo Chạm & Thêm
+        if (chamDigits.length > 0 && themItems.length > 0) {
+            let ghep = getPairGhep(chamDigits, themItems);
+            ghep.forEach(n => baseSet.add(n));
+        } else if (chamDigits.length > 0) {
+            getAll2D().forEach(num => {
+                if (chamDigits.some(d => num.includes(d))) baseSet.add(num);
+            });
+        } else if (themItems.length > 0) {
+            themItems.forEach(item => {
+                if (item.length === 2) baseSet.add(item);
+            });
+        } else if (tongDigits.length > 0) {
+            // Nếu chỉ nhập Tổng (không có Chạm & Thêm) -> Lấy toàn bộ 2D làm cơ sở
+            getAll2D().forEach(num => baseSet.add(num));
+        }
+
+        let res = Array.from(baseSet);
+
+        // 2. Lọc theo ô Tổng nếu có nhập
+        if (tongDigits.length > 0 && res.length > 0) {
+            res = res.filter(num => {
+                let sum = (parseInt(num[0]) + parseInt(num[1])) % 10;
+                return tongDigits.includes(sum.toString());
+            });
+        }
+
+        displayCustomResult(res);
+    }
+
+    function xuLyLayHet() {
+        let chamDigits = parseDigitsOnly(document.getElementById('customCham').value);
+        let tongDigits = parseDigitsOnly(document.getElementById('customTong').value);
+        let themItems = parseInputItems(document.getElementById('customThem').value);
+
+        let setRes = new Set();
+        let all2D = getAll2D();
+
+        if (chamDigits.length > 0) {
+            all2D.forEach(num => {
+                if (chamDigits.some(d => num.includes(d))) setRes.add(num);
+            });
+        }
+
+        if (tongDigits.length > 0) {
+            all2D.forEach(num => {
+                let sum = (parseInt(num[0]) + parseInt(num[1])) % 10;
+                if (tongDigits.includes(sum.toString())) setRes.add(num);
+            });
+        }
+
+        let ghepArr = getPairGhep(chamDigits, themItems);
+        ghepArr.forEach(n => setRes.add(n));
+
+        displayCustomResult(Array.from(setRes));
+    }
+
+    function xoaKhungCustom() {
+        document.getElementById('customCham').value = '';
+        document.getElementById('customTong').value = '';
+        document.getElementById('customThem').value = '';
+        document.getElementById('customResult').innerText = 'Không có số nào!';
+    }
+
+    function chuyenCustomXuongPhan2() {
+        let res2D = document.getElementById('customResult').innerText;
+        if (!res2D || res2D === 'Không có số nào!') return;
+        document.getElementById('input2D').value = res2D;
+        showToast('Đã chuyển dàn Chạm/Tổng xuống Khung 2!');
+        document.getElementById('input2D').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function chuyenCustomXuongPhan3() {
+        let res2D = document.getElementById('customResult').innerText;
+        if (!res2D || res2D === 'Không có số nào!') return;
+        document.getElementById('input2D_K3').value = res2D;
+        showToast('Đã chuyển dàn Chạm/Tổng xuống Khung 3!');
+        document.getElementById('input2D_K3').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // --- LOGIC BỘ SỐ & TẠO 2D ĐẦU/ĐUÔI ---
+    function themBoSo(chuoiSo) {
+        let currentText = document.getElementById('contentTao2D').innerText;
+        let currentArr = currentText ? currentText.split(',') : [];
+        let newArr = chuoiSo.split(',');
+        
+        let combinedSet = new Set([...currentArr, ...newArr]);
+        let res2D = Array.from(combinedSet).sort();
+        
+        document.getElementById('contentTao2D').innerText = res2D.join(','); 
+        document.getElementById('countTao2D').innerText = res2D.length + ' số';
+        document.getElementById('boxTao2D').classList.add('active');
+        
+        document.getElementById('inputDau').value = '';
+        document.getElementById('inputDuoi').value = '';
+    }
+
+    function taoDan2D() {
+        let arrDau = parseInput(document.getElementById('inputDau').value);
+        let arrDuoi = parseInput(document.getElementById('inputDuoi').value);
+        
+        if (arrDau.length === 0 && arrDuoi.length === 0) {
+            alert('Vui lòng nhập ít nhất số Đầu hoặc số Đuôi!');
+            return;
+        }
+
+        if (arrDau.length > 0 && arrDuoi.length === 0) {
+            arrDuoi = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        }
+
+        if (arrDuoi.length > 0 && arrDau.length === 0) {
+            arrDau = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        }
+
+        let set2D = new Set();
+        arrDau.forEach(d => {
+            arrDuoi.forEach(c => {
+                set2D.add(d + c);
+            });
+        });
+
+        let res2D = Array.from(set2D).sort();
+        
+        document.getElementById('contentTao2D').innerText = res2D.join(','); 
+        document.getElementById('countTao2D').innerText = res2D.length + ' số';
+        document.getElementById('boxTao2D').classList.add('active');
+    }
+
+    function chuyenXuongPhan2() {
+        let res2D = document.getElementById('contentTao2D').innerText;
+        if (!res2D) return;
+        document.getElementById('input2D').value = res2D;
+        showToast('Đã chuyển xuống Khung 2!');
+        document.getElementById('input2D').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function chuyenXuongPhan3() {
+        let res2D = document.getElementById('contentTao2D').innerText;
+        if (!res2D) return;
+        document.getElementById('input2D_K3').value = res2D;
+        showToast('Đã chuyển xuống Khung 3!');
+        document.getElementById('input2D_K3').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function xoaKhung1() {
+        document.getElementById('inputDau').value = '';
+        document.getElementById('inputDuoi').value = '';
+        document.getElementById('boxTao2D').classList.remove('active');
+        document.getElementById('contentTao2D').innerText = '';
+    }
+
+    // --- LOGIC KHUNG 2 (GHÉP 3D, 4D, 5D) ---
+    function xuLyGhepSo() {
+        let arr2D = parseInput(document.getElementById('input2D').value);
+        let arr3D = parseInput(document.getElementById('input3D').value);
+        let arr4D = parseInput(document.getElementById('input4D').value);
+        let arr5D = parseInput(document.getElementById('input5D').value);
+        
+        if (arr2D.length === 0 || arr3D.length === 0) {
+            alert('Vui lòng nhập Dãy 2D và Ghép lần 1 (3D)!');
+            return;
+        }
+        
+        let set3D = new Set();
+        arr2D.forEach(n2 => {
+            arr3D.forEach(n3 => {
+                set3D.add(n3 + n2);
+                set3D.add(n2 + n3);
+            });
+        });
+        let res3D = Array.from(set3D).sort();
+        document.getElementById('content3D').innerText = res3D.join(',');
+        document.getElementById('count3D').innerText = res3D.length + ' số';
+        document.getElementById('box3D').classList.add('active');
+        
+        let res4D = [];
+        if (arr4D.length > 0) {
+            let set4D = new Set();
+            res3D.forEach(n3 => {
+                arr4D.forEach(n4 => {
+                    set4D.add(n4 + n3);
+                    set4D.add(n3 + n4);
+                });
+            });
+            res4D = Array.from(set4D).sort();
+            document.getElementById('content4D').innerText = res4D.join(',');
+            document.getElementById('count4D').innerText = res4D.length + ' số';
+            document.getElementById('box4D').classList.add('active');
+        } else {
+            document.getElementById('box4D').classList.remove('active');
+        }
+
+        if (arr5D.length > 0 && res4D.length > 0) {
+            let set5D = new Set();
+            res4D.forEach(n4 => {
+                arr5D.forEach(n5 => {
+                    set5D.add(n5 + n4);
+                    set5D.add(n4 + n5);
+                });
+            });
+            let res5D = Array.from(set5D).sort();
+            document.getElementById('content5D').innerText = res5D.join(',');
+            document.getElementById('count5D').innerText = res5D.length + ' số';
+            document.getElementById('box5D').classList.add('active');
+        } else {
+            document.getElementById('box5D').classList.remove('active');
+        }
+    }
+
+    function xoaTrangPhan2() {
+        document.getElementById('input2D').value = '';
+        document.getElementById('input3D').value = '';
+        document.getElementById('input4D').value = '';
+        document.getElementById('input5D').value = '';
+        document.getElementById('box3D').classList.remove('active');
+        document.getElementById('box4D').classList.remove('active');
+        document.getElementById('box5D').classList.remove('active');
+    }
+
+    // --- LOGIC KHUNG 3 (QUÂY GIỮA) ---
+    function xuLyQuayGiua() {
+        let arr2D = parseInput(document.getElementById('input2D_K3').value);
+        let arrGiua = parseInput(document.getElementById('inputGiua_K3').value);
+        
+        if (arr2D.length === 0 || arrGiua.length === 0) {
+            alert('Vui lòng nhập Dãy 2D và Chữ số ghép!');
+            return;
+        }
+
+        let setQuay = new Set();
+        arr2D.forEach(n2 => {
+            arrGiua.forEach(g => {
+                setQuay.add(g + n2);
+                setQuay.add(n2 + g);
+                if (n2.length === 2) {
+                    setQuay.add(n2[0] + g + n2[1]);
+                }
+            });
+        });
+
+        let resQuay = Array.from(setQuay).sort();
+        document.getElementById('contentQuayGiua').innerText = resQuay.join(',');
+        document.getElementById('countQuayGiua').innerText = resQuay.length + ' số';
+        document.getElementById('boxQuayGiua').classList.add('active');
+    }
+
+    function xoaTrangPhan3() {
+        document.getElementById('input2D_K3').value = '';
+        document.getElementById('inputGiua_K3').value = '';
+        document.getElementById('boxQuayGiua').classList.remove('active');
+    }
+
+    // --- TIỆN ÍCH ---
+    function xoaTatCa() {
+        if(confirm('Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu không?')) {
+            xoaKhungCustom();
+            xoaKhung1();
+            xoaTrangPhan2();
+            xoaTrangPhan3();
+            showToast('Đã dọn sạch mọi dữ liệu!');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function copyText(elementId) {
+        let text = document.getElementById(elementId).innerText;
+        if (!text || text === 'Không có số nào!') return;
+        
+        let textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        
+        try {
+            document.execCommand('copy');
+            showToast('Đã copy dàn số!');
+        } catch (err) {
+            alert('Không thể sao chép tự động.');
+        }
+        document.body.removeChild(textarea);
+    }
+    
+    function showToast(message) {
+        let toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
