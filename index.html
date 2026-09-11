@@ -470,6 +470,12 @@
             </div>
         </div>
 
+        <!-- THÊM Ô LOẠI BỎ TẠI ĐÂY -->
+        <div class="form-group">
+            <label for="inputLoaiBo">Số LOẠI BỎ (Các con số không muốn lấy)</label>
+            <textarea id="inputLoaiBo" style="height: 50px;" placeholder="VD: 02, 14, 26 (Cách nhau bằng dấu phẩy hoặc khoảng trắng)"></textarea>
+        </div>
+
         <div class="btn-group">
             <button class="btn-primary" onclick="taoDan2D()">TẠO DÀN 2D (ĐẦU/ĐUÔI)</button>
             <button class="btn-secondary" onclick="xoaKhung1()">XÓA ĐẦU/ĐUÔI</button>
@@ -727,8 +733,16 @@
         let currentArr = currentText ? currentText.split(',') : [];
         let newArr = chuoiSo.split(',');
         
+        // Lấy danh sách số muốn loại bỏ
+        let arrLoaiBo = parseInput(document.getElementById('inputLoaiBo').value);
+        
         let combinedSet = new Set([...currentArr, ...newArr]);
         let res2D = Array.from(combinedSet).sort();
+        
+        // Lọc các số bị loại bỏ
+        if (arrLoaiBo.length > 0) {
+            res2D = res2D.filter(num => !arrLoaiBo.includes(num));
+        }
         
         document.getElementById('contentTao2D').innerText = res2D.join(','); 
         document.getElementById('countTao2D').innerText = res2D.length + ' số';
@@ -741,6 +755,7 @@
     function taoDan2D() {
         let arrDau = parseInput(document.getElementById('inputDau').value);
         let arrDuoi = parseInput(document.getElementById('inputDuoi').value);
+        let arrLoaiBo = parseInput(document.getElementById('inputLoaiBo').value); // Lấy danh sách số loại bỏ
         
         if (arrDau.length === 0 && arrDuoi.length === 0) {
             alert('Vui lòng nhập ít nhất số Đầu hoặc số Đuôi!');
@@ -758,7 +773,11 @@
         let set2D = new Set();
         arrDau.forEach(d => {
             arrDuoi.forEach(c => {
-                set2D.add(d + c);
+                let num = d + c;
+                // Nếu con số KHÔNG NẰM TRONG danh sách loại bỏ thì mới cho vào Set
+                if (!arrLoaiBo.includes(num)) {
+                    set2D.add(num);
+                }
             });
         });
 
@@ -788,6 +807,7 @@
     function xoaKhung1() {
         document.getElementById('inputDau').value = '';
         document.getElementById('inputDuoi').value = '';
+        document.getElementById('inputLoaiBo').value = ''; // Reset ô loại bỏ
         document.getElementById('boxTao2D').classList.remove('active');
         document.getElementById('contentTao2D').innerText = '';
     }
