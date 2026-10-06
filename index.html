@@ -503,20 +503,34 @@
             <textarea id="input2D" placeholder="Nhập dàn 2D (phân cách bằng dấu phẩy hoặc khoảng trắng)"></textarea>
         </div>
         
+        <label style="margin-top:10px; color:#2b6cb0;">Ghép lần 1 (Tạo 3D):</label>
         <div class="flex-row">
             <div class="form-group">
-                <label for="input3D">Ghép lần 1 (Tạo 3D)</label>
-                <textarea id="input3D" placeholder="VD: 0 1 2"></textarea>
+                <textarea id="input3D_Dau" placeholder="Ghép ĐẦU 3D (VD: 0 1 2)"></textarea>
             </div>
             <div class="form-group">
-                <label for="input4D">Ghép lần 2 (Tạo 4D)</label>
-                <textarea id="input4D" placeholder="VD: 3 4 5"></textarea>
+                <textarea id="input3D_Duoi" placeholder="Ghép ĐUÔI 3D (VD: 3 4)"></textarea>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="input5D">Ghép lần 3 (Tạo 5D)</label>
-            <textarea id="input5D" style="height: 50px;" placeholder="VD: 6 7 8"></textarea>
+        <label style="margin-top:10px; color:#2b6cb0;">Ghép lần 2 (Tạo 4D):</label>
+        <div class="flex-row">
+            <div class="form-group">
+                <textarea id="input4D_Dau" placeholder="Ghép ĐẦU 4D (VD: 3 4 5)"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="input4D_Duoi" placeholder="Ghép ĐUÔI 4D (VD: 6 7)"></textarea>
+            </div>
+        </div>
+
+        <label style="margin-top:10px; color:#2b6cb0;">Ghép lần 3 (Tạo 5D):</label>
+        <div class="flex-row">
+            <div class="form-group">
+                <textarea id="input5D_Dau" placeholder="Ghép ĐẦU 5D"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="input5D_Duoi" placeholder="Ghép ĐUÔI 5D"></textarea>
+            </div>
         </div>
         
         <div class="btn-group">
@@ -815,35 +829,39 @@
     // --- LOGIC KHUNG 2 (GHÉP 3D, 4D, 5D) ---
     function xuLyGhepSo() {
         let arr2D = parseInput(document.getElementById('input2D').value);
-        let arr3D = parseInput(document.getElementById('input3D').value);
-        let arr4D = parseInput(document.getElementById('input4D').value);
-        let arr5D = parseInput(document.getElementById('input5D').value);
         
-        if (arr2D.length === 0 || arr3D.length === 0) {
-            alert('Vui lòng nhập Dãy 2D và Ghép lần 1 (3D)!');
+        let arr3D_Dau = parseInput(document.getElementById('input3D_Dau').value);
+        let arr3D_Duoi = parseInput(document.getElementById('input3D_Duoi').value);
+        
+        let arr4D_Dau = parseInput(document.getElementById('input4D_Dau').value);
+        let arr4D_Duoi = parseInput(document.getElementById('input4D_Duoi').value);
+        
+        let arr5D_Dau = parseInput(document.getElementById('input5D_Dau').value);
+        let arr5D_Duoi = parseInput(document.getElementById('input5D_Duoi').value);
+        
+        if (arr2D.length === 0 || (arr3D_Dau.length === 0 && arr3D_Duoi.length === 0)) {
+            alert('Vui lòng nhập Dãy 2D và ít nhất 1 số Ghép Đầu hoặc Đuôi lần 1 (3D)!');
             return;
         }
         
+        // Xử lý 3D
         let set3D = new Set();
         arr2D.forEach(n2 => {
-            arr3D.forEach(n3 => {
-                set3D.add(n3 + n2);
-                set3D.add(n2 + n3);
-            });
+            arr3D_Dau.forEach(nDau => set3D.add(nDau + n2));    // Ghép lên đầu
+            arr3D_Duoi.forEach(nDuoi => set3D.add(n2 + nDuoi)); // Ghép xuống đuôi
         });
         let res3D = Array.from(set3D).sort();
         document.getElementById('content3D').innerText = res3D.join(',');
         document.getElementById('count3D').innerText = res3D.length + ' số';
         document.getElementById('box3D').classList.add('active');
         
+        // Xử lý 4D
         let res4D = [];
-        if (arr4D.length > 0) {
+        if (arr4D_Dau.length > 0 || arr4D_Duoi.length > 0) {
             let set4D = new Set();
             res3D.forEach(n3 => {
-                arr4D.forEach(n4 => {
-                    set4D.add(n4 + n3);
-                    set4D.add(n3 + n4);
-                });
+                arr4D_Dau.forEach(nDau => set4D.add(nDau + n3));
+                arr4D_Duoi.forEach(nDuoi => set4D.add(n3 + nDuoi));
             });
             res4D = Array.from(set4D).sort();
             document.getElementById('content4D').innerText = res4D.join(',');
@@ -853,13 +871,12 @@
             document.getElementById('box4D').classList.remove('active');
         }
 
-        if (arr5D.length > 0 && res4D.length > 0) {
+        // Xử lý 5D
+        if ((arr5D_Dau.length > 0 || arr5D_Duoi.length > 0) && res4D.length > 0) {
             let set5D = new Set();
             res4D.forEach(n4 => {
-                arr5D.forEach(n5 => {
-                    set5D.add(n5 + n4);
-                    set5D.add(n4 + n5);
-                });
+                arr5D_Dau.forEach(nDau => set5D.add(nDau + n4));
+                arr5D_Duoi.forEach(nDuoi => set5D.add(n4 + nDuoi));
             });
             let res5D = Array.from(set5D).sort();
             document.getElementById('content5D').innerText = res5D.join(',');
@@ -872,9 +889,13 @@
 
     function xoaTrangPhan2() {
         document.getElementById('input2D').value = '';
-        document.getElementById('input3D').value = '';
-        document.getElementById('input4D').value = '';
-        document.getElementById('input5D').value = '';
+        document.getElementById('input3D_Dau').value = '';
+        document.getElementById('input3D_Duoi').value = '';
+        document.getElementById('input4D_Dau').value = '';
+        document.getElementById('input4D_Duoi').value = '';
+        document.getElementById('input5D_Dau').value = '';
+        document.getElementById('input5D_Duoi').value = '';
+        
         document.getElementById('box3D').classList.remove('active');
         document.getElementById('box4D').classList.remove('active');
         document.getElementById('box5D').classList.remove('active');
