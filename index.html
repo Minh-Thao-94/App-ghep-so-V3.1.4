@@ -418,6 +418,11 @@
                         <label for="customThem">Thêm</label>
                         <textarea id="customThem" placeholder="VD: 2,4"></textarea>
                     </div>
+                    <!-- Ô LOẠI BỎ ĐÃ ĐƯỢC THÊM VÀO ĐÂY -->
+                    <div class="input-row-sub">
+                        <label for="customLoaiBo" style="color: #e53e3e;">Loại</label>
+                        <textarea id="customLoaiBo" placeholder="VD: 11,22" style="border-color: #fc8181;"></textarea>
+                    </div>
                 </div>
 
                 <div class="right-results">
@@ -470,7 +475,6 @@
             </div>
         </div>
 
-        <!-- THÊM Ô LOẠI BỎ TẠI ĐÂY -->
         <div class="form-group">
             <label for="inputLoaiBo">Số LOẠI BỎ (Các con số không muốn lấy)</label>
             <textarea id="inputLoaiBo" style="height: 50px;" placeholder="VD: 02, 14, 26 (Cách nhau bằng dấu phẩy hoặc khoảng trắng)"></textarea>
@@ -624,7 +628,7 @@
         return arr;
     }
 
-    // --- LOGIC CHẠM - TỔNG - THÊM ---
+    // --- LOGIC CHẠM - TỔNG - THÊM - LOẠI BỎ ---
     function getPairGhep(chamDigits, themItems) {
         let res = new Set();
         let themDigits = [];
@@ -658,6 +662,7 @@
         let chamDigits = parseDigitsOnly(document.getElementById('customCham').value);
         let tongDigits = parseDigitsOnly(document.getElementById('customTong').value);
         let themItems = parseInputItems(document.getElementById('customThem').value);
+        let loaiItems = parseInputItems(document.getElementById('customLoaiBo').value);
 
         let baseSet = new Set();
 
@@ -688,6 +693,11 @@
             });
         }
 
+        // 3. Lọc theo ô Loại Bỏ
+        if (loaiItems.length > 0 && res.length > 0) {
+            res = res.filter(num => !loaiItems.includes(num));
+        }
+
         displayCustomResult(res);
     }
 
@@ -695,6 +705,7 @@
         let chamDigits = parseDigitsOnly(document.getElementById('customCham').value);
         let tongDigits = parseDigitsOnly(document.getElementById('customTong').value);
         let themItems = parseInputItems(document.getElementById('customThem').value);
+        let loaiItems = parseInputItems(document.getElementById('customLoaiBo').value);
 
         let setRes = new Set();
         let all2D = getAll2D();
@@ -715,13 +726,21 @@
         let ghepArr = getPairGhep(chamDigits, themItems);
         ghepArr.forEach(n => setRes.add(n));
 
-        displayCustomResult(Array.from(setRes));
+        let res = Array.from(setRes);
+
+        // Lọc theo ô Loại Bỏ
+        if (loaiItems.length > 0) {
+            res = res.filter(num => !loaiItems.includes(num));
+        }
+
+        displayCustomResult(res);
     }
 
     function xoaKhungCustom() {
         document.getElementById('customCham').value = '';
         document.getElementById('customTong').value = '';
         document.getElementById('customThem').value = '';
+        document.getElementById('customLoaiBo').value = '';
         document.getElementById('customResult').innerText = 'Không có số nào!';
     }
 
@@ -747,7 +766,7 @@
         let currentArr = currentText ? currentText.split(',') : [];
         let newArr = chuoiSo.split(',');
         
-        // Lấy danh sách số muốn loại bỏ
+        // Lấy danh sách số muốn loại bỏ ở khung bên dưới
         let arrLoaiBo = parseInput(document.getElementById('inputLoaiBo').value);
         
         let combinedSet = new Set([...currentArr, ...newArr]);
@@ -769,7 +788,7 @@
     function taoDan2D() {
         let arrDau = parseInput(document.getElementById('inputDau').value);
         let arrDuoi = parseInput(document.getElementById('inputDuoi').value);
-        let arrLoaiBo = parseInput(document.getElementById('inputLoaiBo').value); // Lấy danh sách số loại bỏ
+        let arrLoaiBo = parseInput(document.getElementById('inputLoaiBo').value); 
         
         if (arrDau.length === 0 && arrDuoi.length === 0) {
             alert('Vui lòng nhập ít nhất số Đầu hoặc số Đuôi!');
@@ -788,7 +807,6 @@
         arrDau.forEach(d => {
             arrDuoi.forEach(c => {
                 let num = d + c;
-                // Nếu con số KHÔNG NẰM TRONG danh sách loại bỏ thì mới cho vào Set
                 if (!arrLoaiBo.includes(num)) {
                     set2D.add(num);
                 }
@@ -821,7 +839,7 @@
     function xoaKhung1() {
         document.getElementById('inputDau').value = '';
         document.getElementById('inputDuoi').value = '';
-        document.getElementById('inputLoaiBo').value = ''; // Reset ô loại bỏ
+        document.getElementById('inputLoaiBo').value = '';
         document.getElementById('boxTao2D').classList.remove('active');
         document.getElementById('contentTao2D').innerText = '';
     }
@@ -847,8 +865,8 @@
         // Xử lý 3D
         let set3D = new Set();
         arr2D.forEach(n2 => {
-            arr3D_Dau.forEach(nDau => set3D.add(nDau + n2));    // Ghép lên đầu
-            arr3D_Duoi.forEach(nDuoi => set3D.add(n2 + nDuoi)); // Ghép xuống đuôi
+            arr3D_Dau.forEach(nDau => set3D.add(nDau + n2));
+            arr3D_Duoi.forEach(nDuoi => set3D.add(n2 + nDuoi));
         });
         let res3D = Array.from(set3D).sort();
         document.getElementById('content3D').innerText = res3D.join(',');
